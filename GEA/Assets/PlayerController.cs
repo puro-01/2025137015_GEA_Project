@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
             if (virtualCam != null)
             {
                 float targetFOV = 60f;
-                virtualCam.m_Lens.FieldOfView,targetFOV,Time.deltaTime * 5f);
+                //virtualCam.m_Lens.FieldOfView.targetFOV.Time.deltaTime * 5f;
             }
 
 
