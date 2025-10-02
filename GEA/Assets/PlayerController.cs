@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,20 +22,49 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     public bool isGrounded;
 
+    public int maxHP = 10;
+
+    private int currentHP;
+
+    public void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        hpSlider.value = (float)currentHP / maxHP;
+
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
+
     public CinemacineSwitcher cs;
     // Start is called before the first frame update
+
+    public Slider hpSlider;
     void Start()
     {
         controller = GetComponent<CharacterController>();
         pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
 
         currentSpeed = walkSpeed;
+        currentHP = maxHP;
+        hpSlider.value = 1f;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            pov.m_HorizontalAxis.Value = transform.eulerAngles.y;
+            pov.m_VerticalAxis.Value = 0f;
+        }
         if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed = runSpeed;
