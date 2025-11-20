@@ -5,10 +5,18 @@ using UnityEngine;
 public class NoiseVoxelMap : MonoBehaviour
 {
     public GameObject grassBlockPrefab;
+
     public GameObject dirtBlockPrefab;
+
+    public GameObject blockPrefabWater;
+
     public int width = 20;
+
     public int depth = 20;
+
     public int maxHeight = 16;
+
+    public int WaterLevel = 4;
 
     [SerializeField] float noiseScale = 20f;
     // Start is called before the first frame update
@@ -28,7 +36,7 @@ public class NoiseVoxelMap : MonoBehaviour
 
                 int h = Mathf.FloorToInt(noise * maxHeight);
 
-                if (h <= 0) continue;
+                if (h <= 0) h = 1;
 
                 for (int y = 0; y <= h; y++)
                 {
@@ -42,6 +50,10 @@ public class NoiseVoxelMap : MonoBehaviour
                         // 잔디 아래(y < h)는 흙을 배치합니다.
                         Place(dirtBlockPrefab, x, y, z);
                     }
+                }
+                for (int y = h + 1; y <= WaterLevel; y++)
+                {
+                    PlaceWater(x, y, z);
                 }
             }
         }
@@ -58,6 +70,12 @@ public class NoiseVoxelMap : MonoBehaviour
 
         var go = Instantiate(prefabToPlace, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"B_{prefabToPlace.name}_{x}_{y}_{z}"; // 이름도 더 구체적으로 변경
+    }
+
+    private void PlaceWater(int x, int y, int z)
+    {
+        var go = Instantiate(blockPrefabWater, new Vector3(x, y, z), Quaternion.identity, transform);
+        go.name = $"Water_{x}_{y}_{z}";
     }
     // Update is called once per frame
     void Update()
