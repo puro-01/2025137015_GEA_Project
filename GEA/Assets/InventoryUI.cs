@@ -29,7 +29,7 @@ public class InventoryUI : MonoBehaviour
         int idx = 0;
         foreach (var item in myInven.items)
         {
-#region
+#region 슬롯아이템 생성 로직 (게임오브젝트 인스턴스 생성, 위치 조정, SlotItemPrefab 컴포넌트 가져오기, 그 후 아이템 세팅
             var go = Instantiate(SlotIrem, Slot[idx].transform);
             go.transform.localPosition = Vector3.zero;
             SlotItemPrefab sItem = go.GetComponent<SlotItemPrefab>();
@@ -46,6 +46,7 @@ public class InventoryUI : MonoBehaviour
                 case BlockType.Water:
                     sItem.ItemSetting(waterSprite, "x" + item.Value.ToString(), item.Key);
                     break;
+
             }
 
             idx++;
@@ -61,5 +62,42 @@ public class InventoryUI : MonoBehaviour
                 SetSelectedIndex(i);
             }
         }
+    }
+    public void SetSelectedIndex(int idx)
+    {
+        ResetSelection();
+        if (selectedIndex == idx)
+        {
+            selectedIndex = -1;
+        }
+        else
+        {
+            if (idx >= items.Count)
+            {
+                selectedIndex = -1;
+            }
+            else
+            {
+                SetSelection(idx);
+                selectedIndex = idx;
+            }
+        }
+    }
+    public void ResetSelection()
+    {
+        foreach(var slot in Slot)
+        {
+            slot.GetComponent<Image>().color = Color.White;
+        }
+    }
+
+    void SetSelection(int _idx)
+    {
+        Slot[_idx].GetComponent<Image>().color = Color.yellow;
+    }
+
+    public BlockType GetInventorySlot()
+    {
+        return items[selectedIndex].GetComponent<SlotItemPrefab>().blockType;
     }
 }

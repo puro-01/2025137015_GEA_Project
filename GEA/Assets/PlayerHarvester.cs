@@ -24,6 +24,7 @@ public class PlayerHarveater : MonoBehaviour
     {
         _cam = Camera.main;
         if (inventory == null) inventory = gameObject.AddComponent<Inventory>();
+        invenUI = FindAnyObjectByType<InventoryUI>();
     }
 
     void Update()

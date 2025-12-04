@@ -7,6 +7,13 @@ public class Inventory : MonoBehaviour
     public Dictionary<BlockType, int> items = new();
     InventoryUI invenUI;
 
+
+    public int GetCount(ItemType id)
+    {
+        items.TryGetValue(id, out var count);
+        return count;
+    }
+
     public void Add(BlockType type, int count = 1)
     {
         if (!items.ContainsKey(type)) items[type] = 0;
